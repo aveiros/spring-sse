@@ -1,0 +1,10 @@
+server:
+  port: 9090
+  contextPath: "/push"
+  error:
+    whitelabel:
+      enabled: false
+
+spring:
+  application:
+    name: push

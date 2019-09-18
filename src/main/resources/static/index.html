@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Push Client</title>
+    <script>
+
+function initialize() {
+	const eventSource = new EventSource('/push/v1/events');
+
+	eventSource.onmessage = e => {
+		const data = JSON.parse(e.data);
+		console.log(data);
+	};
+
+	eventSource.onopen = e => {
+	    document.getElementById("open").innerHTML = new Date().getTime(); + "open";
+	};
+
+	eventSource.onerror = e => {
+		if (e.readyState == EventSource.CLOSED) {
+			console.log('close');
+			document.getElementById("error").innerHTML = new Date().getTime(); + "close";
+		} else {
+			console.log(e);
+			document.getElementById("error").innerHTML = new Date().getTime(); + "error " + JSON.stringify(e);
+		}
+	};
+
+	eventSource.addEventListener('second', function(e) {
+		  document.getElementById("error").innerHTML = new Date().getTime(); + "second " + e.data;
+    }, false);
+}
+
+function duplicateClick() {
+    window.open(window.location.href, '_blank');
+}
+
+window.onload = initialize;
+
+
+
+    </script>
+</head>
+<body>
+<h1>Push Client</h1>
+
+<div>Open:  <span id="open"></span></div>
+<div>Error: <span id="error"></span></div>
+
+<button id="duplicate" onclick="duplicateClick()">Duplicate</button>
+</body>
+</html>
